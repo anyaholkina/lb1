@@ -3,30 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\DTOs\PHPInfoDTO;
+use App\DTOs\ClientInfoDTO;
+use App\DTOs\DatabaseInfoDTO;
 
 class Controller1 extends Controller
 {
     public function phpInfo()
     {
-        return response()->json([
-            'php_version' => phpversion(),
-            'php_info' => 'To display full phpinfo(), visit http://localhost/phpinfo'
-        ]);
+        
+        $phpInfoDTO = new PHPInfoDTO(phpversion(), 'To display full phpinfo(), visit http://localhost/phpinfo');
+        
+        return response()->json($phpInfoDTO);
     }
 
     public function clientInfo(Request $request)
     {
-        return response()->json([
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent()
-        ]);
+
+        $clientInfoDTO = new ClientInfoDTO($request->ip(), $request->userAgent());
+        
+        return response()->json($clientInfoDTO);
     }
 
     public function databaseInfo()
     {
-        return response()->json([
-            'database_connection' => env('DB_CONNECTION'),
-            'database_name' => env('DB_DATABASE')
-        ]);
+        $databaseInfoDTO = new DatabaseInfoDTO(env('DB_CONNECTION'), env('DB_DATABASE'));
+        
+        return response()->json($databaseInfoDTO);
     }
 }
